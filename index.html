@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiYA — Nigerian Youth Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --niya-green: #0A6E3D;
+            --niya-green-light: #0D8A4E;
+            --niya-green-dark: #064D2B;
+            --niya-gold: #D4A843;
+            --niya-gold-light: #F0C95E;
+            --white: #FFFFFF;
+            --off-white: #F8FAF9;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-800);
+            background: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* =============== ECOSYSTEM POPUP OVERLAY =============== */
+        .ecosystem-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            animation: fadeInOverlay 0.5s ease forwards;
+        }
+
+        @keyframes fadeInOverlay {
+            to { opacity: 1; }
+        }
+
+        .ecosystem-popup {
+            width: 94%;
+            max-width: 860px;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-2xl), 0 0 80px rgba(10, 110, 61, 0.15);
+            position: relative;
+            transform: translateY(30px) scale(0.95);
+            opacity: 0;
+            animation: popupSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        @keyframes popupSlideIn {
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-500);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .popup-close:hover {
+            background: var(--gray-200);
+            color: var(--gray-700);
+            transform: rotate(90deg);
+        }
+
+        .popup-header {
+            background: linear-gradient(135deg, var(--niya-green) 0%, var(--niya-green-dark) 50%, #043A1E 100%);
+            padding: 40px 40px 48px;
+            border-radius: 24px 24px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .popup-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 168, 67, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .popup-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .popup-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .popup-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            color: var(--niya-green);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .popup-logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+
+        .popup-logo-text span {
+            color: var(--niya-gold-light);
+        }
+
+        .popup-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--white);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+
+        .popup-subtitle {
+            font-size: 15px;
+            color: rgba(255,255,255,0.8);
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .popup-body {
+            padding: 36px 40px 40px;
+        }
+
+        .popup-body-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gray-400);
+            margin-bottom: 20px;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .eco-card {
+            padding: 24px 20px;
+            border-radius: 16px;
+            border: 2px solid var(--gray-200);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eco-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+
+        .eco-card:hover {
+            border-color: transparent;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .eco-card:nth-child(1):hover { border-color: var(--niya-green); background: linear-gradient(135deg, #F0FFF6, var(--white)); }
+        .eco-card:nth-child(2):hover { border-color: #2563EB; background: linear-gradient(135deg, #EFF6FF, var(--white)); }
+        .eco-card:nth-child(3):hover { border-color: #D97706; background: linear-gradient(135deg, #FFFBEB, var(--white)); }
+        .eco-card:nth-child(4):hover { border-color: #7C3AED; background: linear-gradient(135deg, #F5F3FF, var(--white)); }
+        .eco-card:nth-child(5):hover { border-color: #DC2626; background: linear-gradient(135deg, #FEF2F2, var(--white)); }
+        .eco-card:nth-child(6):hover { border-color: #0891B2; background: linear-gradient(135deg, #ECFEFF, var(--white)); }
+
+        .eco-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+            transition: transform 0.35s;
+        }
+
+        .eco-card:hover .eco-card-icon { transform: scale(1.1); }
+
+        .eco-card:nth-child(1) .eco-card-icon { background: #DCFCE7; color: var(--niya-green); }
+        .eco-card:nth-child(2) .eco-card-icon { background: #DBEAFE; color: #2563EB; }
+        .eco-card:nth-child(3) .eco-card-icon { background: #FEF3C7; color: #D97706; }
+        .eco-card:nth-child(4) .eco-card-icon { background: #EDE9FE; color: #7C3AED; }
+        .eco-card:nth-child(5) .eco-card-icon { background: #FEE2E2; color: #DC2626; }
+        .eco-card:nth-child(6) .eco-card-icon { background: #CFFAFE; color: #0891B2; }
+
+        .eco-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--gray-900);
+        }
+
+        .eco-card-desc {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .eco-card-arrow {
+            margin-top: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: all 0.35s;
+        }
+
+        .eco-card:nth-child(1) .eco-card-arrow { color: var(--niya-green); }
+        .eco-card:nth-child(2) .eco-card-arrow { color: #2563EB; }
+        .eco-card:nth-child(3) .eco-card-arrow { color: #D97706; }
+        .eco-card:nth-child(4) .eco-card-arrow { color: #7C3AED; }
+        .eco-card:nth-child(5) .eco-card-arrow { color: #DC2626; }
+        .eco-card:nth-child(6) .eco-card-arrow { color: #0891B2; }
+
+        .eco-card:hover .eco-card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .popup-footer {
+            padding: 0 40px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .popup-skip {
+            font-size: 13px;
+            color: var(--gray-400);
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: color 0.2s;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .popup-skip:hover { color: var(--gray-600); }
+
+        .popup-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .popup-stat {
+            text-align: center;
+        }
+
+        .popup-stat-num {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--niya-green);
+        }
+
+        .popup-stat-label {
+            font-size: 11px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* =============== NAVIGATION =============== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 5%;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo-box {
+            width: 40px;
+            height: 40px;
+            background: var(--niya-green);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: var(--white);
+        }
+
+        .nav-logo-label {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo-label span { color: var(--niya-green); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--niya-green);
+            background: rgba(10, 110, 61, 0.06);
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-ecosystem-trigger {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid var(--niya-green);
+            background: transparent;
+            color: var(--niya-green);
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ecosystem-trigger:hover {
+            background: var(--niya-green);
+            color: var(--white);
+        }
+
+        .btn-ecosystem-trigger .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--niya-gold);
+            border-radius: 50%;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .btn-get-started {
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            background: var(--niya-green);
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-get-started:hover {
+            background: var(--niya-green-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10,110,61,0.3);
+        }
+
+        /* =============== HERO =============== */
+        .hero {
+            padding: 140px 5% 100px;
+            background: linear-gradient(165deg, #F0FFF6 0%, var(--white) 40%, #FEFDF5 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(10,110,61,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(10, 110, 61, 0.08);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--niya-green);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--niya-green);
+            border-radius: 50%;
+            animation: pulseDot 2s infinite;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            line-height: 1.15;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .highlight {
+            color: var(--niya-green);
+            position: relative;
+        }
+
+        .hero h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: rgba(212, 168, 67, 0.3);
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: var(--gray-500);
+            max-width: 480px;
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .btn-hero-primary {
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            background: var(--niya-green);
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-hero-primary:hover {
+            background: var(--niya-green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(10,110,61,0.25);
+        }
+
+        .btn-hero-secondary {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border: 2px solid var(--gray-200);
+            background: var(--white);
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-hero-secondary:hover {
+            border-color: var(--niya-green);
+            color: var(--niya-green);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .hero-stat-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .hero-stat-label {
+            font-size: 13px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .hero-card-stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .hero-card {
+            padding: 24px;
+            border-radius: 16px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+        }
+
+        .hero-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .hero-card:nth-child(2) { margin-top: 24px; }
+        .hero-card:nth-child(3) { margin-top: -12px; }
+
+        .hero-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .hero-card:nth-child(1) .hero-card-icon { background: #DCFCE7; color: var(--niya-green); }
+        .hero-card:nth-child(2) .hero-card-icon { background: #DBEAFE; color: #2563EB; }
+        .hero-card:nth-child(3) .hero-card-icon { background: #FEF3C7; color: #D97706; }
+        .hero-card:nth-child(4) .hero-card-icon { background: #EDE9FE; color: #7C3AED; }
+
+        .hero-card-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .hero-card-meta {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        /* =============== POWERED BY =============== */
+        .powered-by {
+            padding: 40px 5%;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-100);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .powered-by-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+        }
+
+        .powered-by-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gray-400);
+            white-space: nowrap;
+        }
+
+        .partner-logos {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .partner-logo {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-400);
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+
+        .partner-logo:hover { opacity: 1; }
+
+        /* =============== PILLARS =============== */
+        .pillars {
+            padding: 100px 5%;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 60px;
+        }
+
+        .section-tag {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--niya-green);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 16px;
+            color: var(--gray-500);
+            line-height: 1.7;
+        }
+
+        .pillars-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .pillar-card {
+            padding: 32px 24px;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            transition: all 0.35s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pillar-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 0 0 20px 20px;
+            transition: height 0.35s;
+        }
+
+        .pillar-card:nth-child(1)::after { background: var(--niya-green); }
+        .pillar-card:nth-child(2)::after { background: #2563EB; }
+        .pillar-card:nth-child(3)::after { background: #D97706; }
+        .pillar-card:nth-child(4)::after { background: #7C3AED; }
+
+        .pillar-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+            border-color: transparent;
+        }
+
+        .pillar-card:hover::after { height: 6px; }
+
+        .pillar-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--gray-100);
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .pillar-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .pillar-card:nth-child(1) .pillar-icon { background: #DCFCE7; color: var(--niya-green); }
+        .pillar-card:nth-child(2) .pillar-icon { background: #DBEAFE; color: #2563EB; }
+        .pillar-card:nth-child(3) .pillar-icon { background: #FEF3C7; color: #D97706; }
+        .pillar-card:nth-child(4) .pillar-icon { background: #EDE9FE; color: #7C3AED; }
+
+        .pillar-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .pillar-stat {
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .pillar-stat-num {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .pillar-stat-label {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        .pillar-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 16px;
+            transition: gap 0.2s;
+        }
+
+        .pillar-card:nth-child(1) .pillar-link { color: var(--niya-green); }
+        .pillar-card:nth-child(2) .pillar-link { color: #2563EB; }
+        .pillar-card:nth-child(3) .pillar-link { color: #D97706; }
+        .pillar-card:nth-child(4) .pillar-link { color: #7C3AED; }
+
+        .pillar-link:hover { gap: 10px; }
+
+        /* =============== CAMPAIGNS / INITIATIVES =============== */
+        .campaigns {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
+        }
+
+        .campaigns-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .campaign-card {
+            padding: 32px;
+            border-radius: 20px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .campaign-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .campaign-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .campaign-badge.active { background: #DCFCE7; color: var(--niya-green); }
+        .campaign-badge.upcoming { background: #FEF3C7; color: #D97706; }
+        .campaign-badge.new { background: #DBEAFE; color: #2563EB; }
+
+        .campaign-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .campaign-desc {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .campaign-partners {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .campaign-partner-tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        /* =============== VISION =============== */
+        .vision {
+            padding: 100px 5%;
+            background: linear-gradient(135deg, var(--niya-green) 0%, var(--niya-green-dark) 50%, #043A1E 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vision::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212,168,67,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .vision-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vision .section-tag { color: var(--niya-gold-light); }
+
+        .vision .section-title {
+            color: var(--white);
+            font-size: 42px;
+        }
+
+        .vision .section-desc {
+            color: rgba(255,255,255,0.75);
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+
+        .vision-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .vision-stat-card {
+            padding: 32px 20px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s;
+        }
+
+        .vision-stat-card:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-4px);
+        }
+
+        .vision-stat-num {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .vision-stat-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* =============== TESTIMONIALS =============== */
+        .testimonials {
+            padding: 100px 5%;
+            background: var(--white);
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .testimonial-stars {
+            color: var(--niya-gold);
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--niya-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .testimonial-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .testimonial-location {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        /* =============== FOOTER =============== */
+        .footer {
+            padding: 80px 5% 40px;
+            background: var(--gray-900);
+            color: var(--gray-400);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand-desc {
+            font-size: 14px;
+            line-height: 1.7;
+            margin-top: 16px;
+            max-width: 300px;
+        }
+
+        .footer-heading {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            font-size: 14px;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-socials a {
+            color: var(--gray-400);
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+
+        .footer-socials a:hover { color: var(--white); }
+
+        /* =============== RESPONSIVE =============== */
+        @media (max-width: 1024px) {
+            .ecosystem-grid { grid-template-columns: repeat(2, 1fr); }
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+            .vision-stats { grid-template-columns: repeat(2, 1fr); }
+            .hero-content { grid-template-columns: 1fr; }
+            .hero-visual { display: none; }
+            .hero h1 { font-size: 42px; }
+        }
+
+        @media (max-width: 768px) {
+            .ecosystem-popup { border-radius: 20px; }
+            .popup-header { padding: 28px 24px 36px; }
+            .popup-body { padding: 24px; }
+            .popup-footer { padding: 0 24px 24px; flex-direction: column; gap: 16px; }
+            .popup-title { font-size: 22px; }
+            .ecosystem-grid { grid-template-columns: 1fr; }
+            .campaigns-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 34px; }
+            .section-title { font-size: 30px; }
+            .vision .section-title { font-size: 32px; }
+            .hero-stats { gap: 20px; }
+            .popup-stats { gap: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .pillars-grid { grid-template-columns: 1fr; }
+            .vision-stats { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hero-actions { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* =============== ANIMATIONS =============== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== ECOSYSTEM POPUP ========== -->
+    <div class="ecosystem-overlay" id="ecosystemOverlay">
+        <div class="ecosystem-popup">
+            <button class="popup-close" onclick="closePopup()" aria-label="Close">&times;</button>
+
+            <div class="popup-header">
+                <div class="popup-logo">
+                    <div class="popup-logo-icon">N</div>
+                    <div class="popup-logo-text">NiYA <span>Ecosystem</span></div>
+                </div>
+                <h2 class="popup-title">Welcome to the NiYA Ecosystem</h2>
+                <p class="popup-subtitle">Nigeria's largest youth empowerment platform. Tell us what brings you here and we'll guide you to the right place.</p>
+            </div>
+
+            <div class="popup-body">
+                <p class="popup-body-label">I want to...</p>
+
+                <div class="ecosystem-grid">
+                    <!-- Card 1: Become a Learner -->
+                    <a href="#academy" class="eco-card" onclick="closePopup()">
+                        <div class="eco-card-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="eco-card-title">Become a Learner</div>
+                        <div class="eco-card-desc">Access 58+ free courses and gain marketable skills at your own pace.</div>
+                        <div class="eco-card-arrow">Go to NiYA Academy <i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <!-- Card 2: Become a Freelancer -->
+                    <a href="#gigs" class="eco-card" onclick="closePopup()">
+                        <div class="eco-card-icon"><i class="fas fa-laptop-code"></i></div>
+                        <div class="eco-card-title">Become a Freelancer</div>
+                        <div class="eco-card-desc">Monetize your skills, find gigs, and earn globally from Nigeria.</div>
+                        <div class="eco-card-arrow">Go to NiYA Gigs <i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <!-- Card 3: Employ Youths -->
+                    <a href="#community" class="eco-card" onclick="closePopup()">
+                        <div class="eco-card-icon"><i class="fas fa-building"></i></div>
+                        <div class="eco-card-title">Employ Youths</div>
+                        <div class="eco-card-desc">Tap into a pool of 210k+ skilled young Nigerians ready to work.</div>
+                        <div class="eco-card-arrow">Find Talent <i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <!-- Card 4: Get a Job -->
+                    <a href="#community" class="eco-card" onclick="closePopup()">
+                        <div class="eco-card-icon"><i class="fas fa-briefcase"></i></div>
+                        <div class="eco-card-title">Get a Job</div>
+                        <div class="eco-card-desc">Browse opportunities and connect directly with employers across Nigeria.</div>
+                        <div class="eco-card-arrow">Browse Jobs <i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <!-- Card 5: Become a Partner / Sponsor -->
+                    <a href="#campaigns" class="eco-card" onclick="closePopup()">
+                        <div class="eco-card-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="eco-card-title">Partner / Sponsor</div>
+                        <div class="eco-card-desc">Join FMYD, NAICOM, NDPC & others powering Nigeria's youth economy.</div>
+                        <div class="eco-card-arrow">Explore Partnerships <i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <!-- Card 6: Network with Like Minds -->
+                    <a href="#community" class="eco-card" onclick="closePopup()">
+                        <div class="eco-card-icon"><i class="fas fa-users"></i></div>
+                        <div class="eco-card-title">Network</div>
+                        <div class="eco-card-desc">Connect with 89k+ ambitious young Nigerians building the future.</div>
+                        <div class="eco-card-arrow">Join Community <i class="fas fa-arrow-right"></i></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="popup-footer">
+                <button class="popup-skip" onclick="closePopup()">Skip &mdash; take me to the homepage</button>
+                <div class="popup-stats">
+                    <div class="popup-stat">
+                        <div class="popup-stat-num">210K+</div>
+                        <div class="popup-stat-label">Youth Reached</div>
+                    </div>
+                    <div class="popup-stat">
+                        <div class="popup-stat-num">58</div>
+                        <div class="popup-stat-label">Courses</div>
+                    </div>
+                    <div class="popup-stat">
+                        <div class="popup-stat-num">17</div>
+                        <div class="popup-stat-label">Startups Funded</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-box">N</div>
+            <div class="nav-logo-label">Ni<span>YA</span></div>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Startup</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="#">Service</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Resources</a></li>
+        </ul>
+
+        <div class="nav-cta">
+            <button class="btn-ecosystem-trigger" onclick="openPopup()">
+                <span class="pulse-dot"></span>
+                Explore Ecosystem
+            </button>
+            <button class="btn-get-started">Get Started</button>
+        </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge"><span class="dot"></span> One Youth, Two Skills</div>
+                <h1>Together, We're Shaping a <span class="highlight">Brighter Future</span> for Nigeria.</h1>
+                <p>NiYA is Nigeria's largest youth empowerment ecosystem &mdash; learn new skills, find work, launch your startup, and connect with a community of ambitious young Nigerians.</p>
+                <div class="hero-actions">
+                    <button class="btn-hero-primary" onclick="openPopup()">
+                        Explore the Ecosystem <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-hero-secondary">Watch Video</button>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">210K+</div>
+                        <div class="hero-stat-label">Youth Participants</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">58</div>
+                        <div class="hero-stat-label">Free Courses</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">26K+</div>
+                        <div class="hero-stat-label">On NiYA Gigs</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">89K+</div>
+                        <div class="hero-stat-label">Community Members</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-card-stack">
+                    <div class="hero-card">
+                        <div class="hero-card-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="hero-card-name">NiYA Academy</div>
+                        <div class="hero-card-meta">58 courses &bull; Free</div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon"><i class="fas fa-users"></i></div>
+                        <div class="hero-card-name">NiYA Community</div>
+                        <div class="hero-card-meta">89K+ members</div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon"><i class="fas fa-laptop-code"></i></div>
+                        <div class="hero-card-name">NiYA Gigs</div>
+                        <div class="hero-card-meta">26K+ freelancers</div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon"><i class="fas fa-rocket"></i></div>
+                        <div class="hero-card-name">NiYA StartUp</div>
+                        <div class="hero-card-meta">17 funded</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== POWERED BY ========== -->
+    <section class="powered-by">
+        <div class="powered-by-inner">
+            <div class="powered-by-label">Powered By</div>
+            <div class="partner-logos">
+                <div class="partner-logo">FMYD</div>
+                <div class="partner-logo">SAPPHITAL</div>
+                <div class="partner-logo">THE DIGITAL SCHOOL</div>
+                <div class="partner-logo">SUPERTEAM</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOUR PILLARS ========== -->
+    <section class="pillars" id="pillars">
+        <div class="section-header fade-up">
+            <div class="section-tag">The Ecosystem</div>
+            <h2 class="section-title">NiYA is Unfolding in Phases</h2>
+            <p class="section-desc">Four interconnected platforms designed to take Nigerian youth from learning to earning.</p>
+        </div>
+
+        <div class="pillars-grid">
+            <div class="pillar-card fade-up" id="academy">
+                <div class="pillar-number">01</div>
+                <div class="pillar-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="pillar-name">NiYA Academy</div>
+                <div class="pillar-desc">Equip yourself with at least two marketable skills through practical, hands-on training across tech, business, and creative industries.</div>
+                <div class="pillar-stat">
+                    <div class="pillar-stat-num">63K+</div>
+                    <div class="pillar-stat-label">Youth Trained</div>
+                </div>
+                <a href="#" class="pillar-link">Start Learning <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="pillar-card fade-up" id="community">
+                <div class="pillar-number">02</div>
+                <div class="pillar-icon"><i class="fas fa-users"></i></div>
+                <div class="pillar-name">NiYA Community</div>
+                <div class="pillar-desc">Connect with employers, find job opportunities, and showcase your skills in a dynamic network of like-minded professionals.</div>
+                <div class="pillar-stat">
+                    <div class="pillar-stat-num">89K+</div>
+                    <div class="pillar-stat-label">Active Members</div>
+                </div>
+                <a href="#" class="pillar-link">Join Community <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="pillar-card fade-up" id="gigs">
+                <div class="pillar-number">03</div>
+                <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
+                <div class="pillar-name">NiYA Gigs</div>
+                <div class="pillar-desc">Monetize your skills as a freelancer. Find high-paying gigs, work with global clients, and get paid locally in Nigeria.</div>
+                <div class="pillar-stat">
+                    <div class="pillar-stat-num">26K+</div>
+                    <div class="pillar-stat-label">Freelancers</div>
+                </div>
+                <a href="#" class="pillar-link">Find Gigs <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="pillar-card fade-up" id="startup">
+                <div class="pillar-number">04</div>
+                <div class="pillar-icon"><i class="fas fa-rocket"></i></div>
+                <div class="pillar-name">NiYA StartUp</div>
+                <div class="pillar-desc">Get funding, mentorship, and national visibility for your startup. 17 startups funded from 14,000+ applications in Pitch 1.0.</div>
+                <div class="pillar-stat">
+                    <div class="pillar-stat-num">17</div>
+                    <div class="pillar-stat-label">Startups Funded</div>
+                </div>
+                <a href="#" class="pillar-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CAMPAIGNS / INITIATIVES ========== -->
+    <section class="campaigns" id="campaigns">
+        <div class="section-header fade-up">
+            <div class="section-tag">Joint Campaigns</div>
+            <h2 class="section-title">National Youth Initiatives</h2>
+            <p class="section-desc">Strategic partnerships driving large-scale impact across key sectors of Nigeria's economy.</p>
+        </div>
+
+        <div class="campaigns-grid">
+            <div class="campaign-card fade-up">
+                <div class="campaign-badge active">Active</div>
+                <div class="campaign-title">1 Million Youths in Insurance</div>
+                <div class="campaign-desc">40-module Insurance Education Course developed with NAICOM and CIIN to create a new generation of insurance-literate youth.</div>
+                <div class="campaign-partners">
+                    <span class="campaign-partner-tag">FMYD</span>
+                    <span class="campaign-partner-tag">NAICOM</span>
+                    <span class="campaign-partner-tag">CIIN</span>
+                    <span class="campaign-partner-tag">Sapphital</span>
+                </div>
+            </div>
+
+            <div class="campaign-card fade-up">
+                <div class="campaign-badge new">New</div>
+                <div class="campaign-title">Youth Data Protection Officers</div>
+                <div class="campaign-desc">Training Nigerian youths in Data Protection via the NiYA Platform and deploying them as certified DPOs across the country.</div>
+                <div class="campaign-partners">
+                    <span class="campaign-partner-tag">FMYD</span>
+                    <span class="campaign-partner-tag">NDPC</span>
+                </div>
+            </div>
+
+            <div class="campaign-card fade-up">
+                <div class="campaign-badge upcoming">Upcoming</div>
+                <div class="campaign-title">Youth Presidential CNG Initiative</div>
+                <div class="campaign-desc">Partnering with the Presidential CNG Initiative for sustainable energy, lower transportation costs, and green economy jobs for youth.</div>
+                <div class="campaign-partners">
+                    <span class="campaign-partner-tag">FMYD</span>
+                    <span class="campaign-partner-tag">CNG Initiative</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== VISION ========== -->
+    <section class="vision">
+        <div class="vision-inner">
+            <div class="section-tag">Strategic Vision</div>
+            <h2 class="section-title" style="margin-bottom: 16px;">The NiYA Vision is 7 Million Strong</h2>
+            <p class="section-desc">In the heart of Nigeria's transformative journey, NiYA stands as a dynamic force propelling the nation's future through innovation, collaboration, and youth empowerment.</p>
+
+            <div class="vision-stats">
+                <div class="vision-stat-card">
+                    <div class="vision-stat-num">7M</div>
+                    <div class="vision-stat-label">Youth Trained in 2 Years</div>
+                </div>
+                <div class="vision-stat-card">
+                    <div class="vision-stat-num">5M</div>
+                    <div class="vision-stat-label">Jobs in 3 Years</div>
+                </div>
+                <div class="vision-stat-card">
+                    <div class="vision-stat-num">210K+</div>
+                    <div class="vision-stat-label">Youth Reached So Far</div>
+                </div>
+                <div class="vision-stat-card">
+                    <div class="vision-stat-num">58</div>
+                    <div class="vision-stat-label">Courses Live</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS ========== -->
+    <section class="testimonials">
+        <div class="section-header fade-up">
+            <div class="section-tag">Real Stories</div>
+            <h2 class="section-title">Real Impact Across Nigeria</h2>
+            <p class="section-desc">See how NiYA is changing lives from Maiduguri to Uyo.</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-up">
+                <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <div class="testimonial-text">"NiYA Academy gave me the skills I needed to switch careers. I learned web development and digital marketing, and within three months, I landed my first job!"</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">CM</div>
+                    <div>
+                        <div class="testimonial-name">Chinedu M.</div>
+                        <div class="testimonial-location">Abia</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card fade-up">
+                <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <div class="testimonial-text">"Through NiYA Gigs, I connected with clients from across Nigeria and abroad! Now, I earn more than I ever did at my previous job."</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">AO</div>
+                    <div>
+                        <div class="testimonial-name">Aisha O.</div>
+                        <div class="testimonial-location">Abuja</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card fade-up">
+                <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <div class="testimonial-text">"NiYA is not just a platform — it's a movement. The skills I've gained, the people I've met, and the jobs I've secured have completely transformed my life."</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">BC</div>
+                    <div>
+                        <div class="testimonial-name">Blessing C.</div>
+                        <div class="testimonial-location">Uyo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+                    <div class="nav-logo-box" style="background:var(--niya-green);">N</div>
+                    <div style="font-size:20px;font-weight:800;color:var(--white);">NiYA</div>
+                </div>
+                <p class="footer-brand-desc">The Nigerian Youth Academy &mdash; a hub of inspiration, transformation, and limitless possibilities for the future of our nation.</p>
+            </div>
+            <div>
+                <div class="footer-heading">Platform</div>
+                <ul class="footer-links">
+                    <li><a href="#">NiYA Academy</a></li>
+                    <li><a href="#">NiYA Community</a></li>
+                    <li><a href="#">NiYA Gigs</a></li>
+                    <li><a href="#">NiYA StartUp</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-heading">Resources</div>
+                <ul class="footer-links">
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="#">Elders Corner</a></li>
+                    <li><a href="#">News & Updates</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-heading">Connect</div>
+                <ul class="footer-links">
+                    <li><a href="#">About NiYA</a></li>
+                    <li><a href="#">Partner with Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2025 Nigerian Youth Academy. All rights reserved.</span>
+            <div class="footer-socials">
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function closePopup() {
+            const overlay = document.getElementById('ecosystemOverlay');
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        function openPopup() {
+            const overlay = document.getElementById('ecosystemOverlay');
+            overlay.style.display = 'flex';
+            overlay.style.opacity = '0';
+            requestAnimationFrame(() => {
+                overlay.style.transition = 'opacity 0.3s ease';
+                overlay.style.opacity = '1';
+            });
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        // Scroll fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
